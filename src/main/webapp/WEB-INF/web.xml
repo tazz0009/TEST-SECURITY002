@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"  
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee   
+                        http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"  
+    id="spring-web" version="2.5">  
+  
+    <display-name>TEST-SECURITY Web Application</display-name>  
+  
+    <!--  
+        ========================================================================  
+        log4j 설정이 ContextLoaderListener보다 앞에 있어야 한다.  
+        ========================================================================  
+    -->  
+    <listener>  
+        <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>  
+    </listener>  
+  
+    <context-param>  
+        <param-name>log4jConfigLocation</param-name>  
+        <param-value>classpath:spring/log4j.properties</param-value>  
+    </context-param>  
+  
+    <!--  
+        ========================================================================  
+       	웹 어플리케이션이 시작되는 시점에 ApplicationContext을 로딩하며,   
+		로딩된 빈정보는 모든 WebApplicationContext들이 참조할 수 있다.  
+        ========================================================================  
+    -->  
+    <listener>  
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>  
+    </listener>  
+  
+    <!--  
+        ========================================================================  
+        Encoding 설정  
+        ========================================================================  
+    -->  
+    <filter>  
+        <filter-name>encodingFilter</filter-name>  
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>  
+        <init-param>  
+            <param-name>encoding</param-name>  
+            <param-value>EUC-KR</param-value>  
+        </init-param>  
+    </filter>  
+    <filter-mapping>  
+        <filter-name>encodingFilter</filter-name>  
+        <url-pattern>/*</url-pattern>  
+    </filter-mapping>  
+  
+    <!--  
+        ========================================================================  
+        Back 부분(dao, service)context 공통으로 사용  
+        ========================================================================  
+    -->  
+    <context-param>  
+        <param-name>contextConfigLocation</param-name>  
+        <param-value>  
+            classpath:spring/applicationContext.xml  
+        </param-value>  
+    </context-param>  
+  
+    <!--  
+        ========================================================================  
+		웹 부분 context  
+        ========================================================================  
+    -->  
+    <servlet>  
+        <servlet-name>spring-web</servlet-name>  
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>  
+        <init-param>  
+            <param-name>contextConfigLocation</param-name>  
+            <param-value>  
+                /WEB-INF/spring/servletContext.xml  
+            </param-value>  
+        </init-param>  
+    </servlet>  
+  
+    <servlet-mapping>  
+        <servlet-name>spring-web</servlet-name>  
+        <url-pattern>*.web</url-pattern>  
+    </servlet-mapping>  
+
+    <!--  
+        ========================================================================  
+		Spring Security  
+        ========================================================================  
+  	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+    -->    
+  
+  
+    <welcome-file-list>  
+        <welcome-file>index.jsp</welcome-file>  
+    </welcome-file-list>  
+  
+  
+  	<error-page>
+        <error-code>403</error-code>
+        <location>/403.jsp</location>
+    </error-page>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/404.jsp</location>
+    </error-page>
+
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+  
+</web-app>  
